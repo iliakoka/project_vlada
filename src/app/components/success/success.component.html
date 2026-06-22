@@ -18,5 +18,33 @@
     <p class="success-subtext">
       До скорой встречи, Влада.
     </p>
+
+    <!-- Wish Section -->
+    <div class="wish-section" [class.submitted]="wishSubmitted">
+      <ng-container *ngIf="!wishSubmitted">
+        <p class="wish-prompt">Какое у тебя желание на август?</p>
+        <div class="wish-input-wrapper">
+          <textarea
+            class="wish-textarea"
+            [(ngModel)]="wishText"
+            placeholder="Напиши сюда..."
+            rows="3"
+            maxlength="300"
+          ></textarea>
+          <button
+            class="wish-submit-btn"
+            [disabled]="!wishText.trim()"
+            (click)="submitWish()"
+          >
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </ng-container>
+
+      <div class="wish-thanks" *ngIf="wishSubmitted">
+        <span class="wish-thanks-icon">🌙</span>
+        <p>Пусть август исполнит всё, что ты загадала.</p>
+      </div>
+    </div>
   </div>
 </div>

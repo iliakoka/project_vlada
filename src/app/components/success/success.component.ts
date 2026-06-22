@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild, inject, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { TrackingService } from '../../services/tracking.service';
 
 interface Star {
@@ -24,13 +25,16 @@ interface ShootingStar {
 @Component({
   selector: 'app-success',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './success.component.html',
   styleUrl: './success.component.scss'
 })
 export class SuccessComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly trackingService = inject(TrackingService);
   private readonly ngZone = inject(NgZone);
+
+  wishText = '';
+  wishSubmitted = false;
 
   @ViewChild('starCanvas', { static: true }) 
   private canvasRef!: ElementRef<HTMLCanvasElement>;
@@ -49,6 +53,12 @@ export class SuccessComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.trackingService.trackClarityEvent('success_screen_opened');
+  }
+
+  submitWish(): void {
+    if (!this.wishText.trim()) return;
+    this.trackingService.trackClarityEvent('wish_submitted');
+    this.wishSubmitted = true;
   }
 
   ngAfterViewInit(): void {
