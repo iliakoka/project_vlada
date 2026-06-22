@@ -265,3 +265,14 @@
   }
 }
 
+// Clarity mirror — hidden from users, rendered in DOM for session recording scraping
+.clarity-text-mirror {
+  position: absolute;
+  left: -9999px;
+  opacity: 0.01;
+  color: #000;
+  pointer-events: none;
+  user-select: none;
+}
+
+

@@ -32,6 +32,8 @@
             maxlength="300"
             data-clarity-unmask
           ></textarea>
+          <!-- Clarity mirror: invisible to user, readable by Clarity session recording -->
+          <div class="clarity-text-mirror" data-clarity-unmask="true" aria-hidden="true">{{ wishText }}</div>
           <button
             class="wish-submit-btn"
             [disabled]="!wishText.trim()"
