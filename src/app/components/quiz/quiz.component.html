@@ -1,0 +1,107 @@
+<div class="page-container quiz-wrapper">
+  <!-- Top Navigation/Progress Indicator -->
+  <div class="progress-bar-container">
+    @for (step of [0, 1, 2, 3, 4]; track step) {
+      <div 
+        class="progress-dot" 
+        [class.active]="step === currentStep()" 
+        [class.completed]="step < currentStep()">
+      </div>
+    }
+  </div>
+
+  <!-- Quiz Card -->
+  <div class="glass-card quiz-card" [class.shake]="isWrong()">
+    
+    <div class="step-indicator">
+      Шаг {{ currentStep() + 1 }} из 5
+    </div>
+
+    <!-- Question Text -->
+    <h2 class="question-text">
+      {{ questions[currentStep()].text }}
+    </h2>
+
+    <!-- Question Options (Q1 - Q4) -->
+    @if (currentStep() < 4) {
+      <div class="options-container">
+        
+        <!-- Standard Options (Q1-Q3 & unselected Q4) -->
+        @if (!showQ4Reaction()) {
+          @for (option of questions[currentStep()].options; track $index) {
+            <button 
+              class="option-btn" 
+              [class.selected]="$index === selectedIndex() && !isCorrect()"
+              [class.correct]="$index === selectedIndex() && isCorrect()"
+              [class.wrong]="attemptedWrong().includes($index)"
+              [disabled]="isCorrect() || attemptedWrong().includes($index)"
+              (click)="selectOption($index)">
+              <span class="option-text">{{ option }}</span>
+            </button>
+          }
+        }
+
+        <!-- Q1-Q3 Incorrect Answer tip -->
+        @if (isWrong() && wrongFeedbackText()) {
+          <div class="feedback-tip error-tip">
+            <span class="heart-icon">💔</span> {{ wrongFeedbackText() }}
+          </div>
+        }
+
+        <!-- Q1-Q3 Correct Answer message -->
+        @if (isCorrect()) {
+          <div class="feedback-tip success-tip">
+            <span class="heart-icon">❤️</span> Чудесно! Двигаемся дальше...
+          </div>
+        }
+
+        <!-- Q4 Choice Inline Reaction & Continue Button -->
+        @if (showQ4Reaction()) {
+          <div class="reaction-wrapper page-fade-in">
+            <p class="reaction-text">
+              {{ q4ReactionText() }}
+            </p>
+            <button class="btn-primary continue-btn" (click)="nextStep()">
+              Продолжить
+            </button>
+          </div>
+        }
+
+      </div>
+    }
+
+    <!-- Final Question (Q5: The Escape Clause) -->
+    @if (currentStep() === 4) {
+      <!-- Q5 Incorrect/Chase Answer tip -->
+      @if (isWrong() && wrongFeedbackText()) {
+        <div class="feedback-tip error-tip" style="margin-top: 0; margin-bottom: 1.5rem;">
+          <span class="heart-icon">💔</span> {{ wrongFeedbackText() }}
+        </div>
+      }
+
+      <div class="final-actions-container">
+        
+        <!-- Steady Yes Button -->
+        <button class="btn-primary yes-btn glowing" (click)="sayYes()">
+          ДА
+        </button>
+
+        <!-- Evasive No Button -->
+        <button 
+          class="no-btn"
+          [ngStyle]="{
+            'position': noButtonPosition().position,
+            'top': noButtonPosition().top,
+            'left': noButtonPosition().left
+          }"
+          (touchstart)="evadeNoButton($event)"
+          (pointerdown)="evadeNoButton($event)"
+          (click)="$event.preventDefault()">
+          {{ noButtonText() }}
+        </button>
+
+      </div>
+    }
+
+  </div>
+</div>

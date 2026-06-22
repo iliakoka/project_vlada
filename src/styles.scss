@@ -1,1 +1,238 @@
-/* You can add global styles to this file, and also import other style files */
+/* Custom Romantic Theme & Design System for Vlada's Web App */
+
+// Variables
+:root {
+  --bg-gradient: linear-gradient(135deg, #04040c 0%, #0c0d22 50%, #05050f 100%);
+  --accent-color: #ff758c;
+  --accent-glow: rgba(255, 117, 140, 0.35);
+  --accent-glow-soft: rgba(255, 117, 140, 0.08);
+  
+  --secondary-color: #ffd166;
+  --secondary-glow: rgba(253, 209, 102, 0.35);
+  
+  --success-color: #4ade80;
+  --success-glow: rgba(74, 222, 128, 0.4);
+  
+  --error-color: #f87171;
+  --error-glow: rgba(248, 113, 113, 0.4);
+
+  --text-main: #f3f4f6;
+  --text-muted: #9ca3af;
+  --text-dim: #6b7280;
+
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-bg-hover: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-focus: rgba(255, 117, 140, 0.4);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+
+  --font-header: 'Montserrat', -apple-system, sans-serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+}
+
+// Reset
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent; /* Disable tap highlight on mobile */
+  outline: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  min-height: 100dvh;
+  background-color: #04040c;
+  background-image: var(--bg-gradient);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 16px;
+  overflow: hidden; /* Lock viewport for app-like feeling */
+  position: relative;
+}
+
+// Global Ambient Glows (placed behind the router outlet)
+.ambient-glow-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ambient-glow-1 {
+  position: absolute;
+  top: -10%;
+  right: -10%;
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-glow-soft) 0%, rgba(0,0,0,0) 70%);
+  filter: blur(80px);
+  animation: float-slow 20s infinite alternate;
+}
+
+.ambient-glow-2 {
+  position: absolute;
+  bottom: -10%;
+  left: -10%;
+  width: 70%;
+  height: 70%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(110, 68, 255, 0.06) 0%, rgba(0,0,0,0) 75%);
+  filter: blur(100px);
+  animation: float-slow 25s infinite alternate-reverse;
+}
+
+.ambient-glow-3 {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  height: 50%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(253, 209, 102, 0.04) 0%, rgba(0,0,0,0) 60%);
+  filter: blur(90px);
+  animation: pulse-slow 15s infinite alternate;
+}
+
+// App Root Wrapper
+app-root {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+// Typography
+h1, h2, h3, h4 {
+  font-family: var(--font-header);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+// Shared Glassmorphism Card Style
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  box-shadow: var(--glass-shadow);
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+// Styled Glass Buttons
+.btn-primary {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(255, 117, 140, 0.2) 0%, rgba(255, 117, 140, 0.05) 100%);
+  border: 1px solid var(--accent-color);
+  color: var(--text-main);
+  font-family: var(--font-header);
+  font-weight: 500;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(255, 117, 140, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  text-decoration: none;
+  
+  &:active {
+    transform: scale(0.96);
+    box-shadow: 0 0 8px rgba(255, 117, 140, 0.3);
+  }
+
+  &.glowing {
+    animation: btn-glow 3s infinite alternate;
+  }
+}
+
+// Animations
+@keyframes float-slow {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(8%, 10%) scale(1.1);
+  }
+}
+
+@keyframes pulse-slow {
+  0% {
+    opacity: 0.4;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  100% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+@keyframes btn-glow {
+  0% {
+    box-shadow: 0 0 12px rgba(255, 117, 140, 0.15), inset 0 0 5px rgba(255, 117, 140, 0.1);
+    border-color: rgba(255, 117, 140, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 25px rgba(255, 117, 140, 0.45), inset 0 0 10px rgba(255, 117, 140, 0.2);
+    border-color: rgba(255, 117, 140, 1);
+  }
+}
+
+// Page Transition Base
+.page-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  overflow-y: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  
+  /* Fade-in page entrance by default */
+  animation: page-fade-in 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Shaking effect for wrong answers
+.shake {
+  animation: shake-anim 0.4s ease-in-out;
+}
+
+@keyframes shake-anim {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}

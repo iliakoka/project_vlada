@@ -1,0 +1,159 @@
+.success-screen-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #03040c; // Fallback
+}
+
+.stars-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.message-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+// Pulsing Heart Graphic
+.heart-container {
+  position: relative;
+  margin-bottom: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: heart-entry 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.pulsing-heart {
+  width: 70px;
+  height: 70px;
+  fill: var(--accent-color);
+  filter: drop-shadow(0 0 15px var(--accent-glow));
+  animation: heart-pulse 2s infinite ease-in-out;
+  z-index: 5;
+}
+
+.heart-glow {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 117, 140, 0.3) 0%, rgba(255, 117, 140, 0) 70%);
+  filter: blur(10px);
+  z-index: 3;
+  animation: heart-glow-pulse 2s infinite ease-in-out;
+}
+
+// Success Copywriting Text
+.success-header {
+  font-size: 1.85rem;
+  font-weight: 300;
+  color: var(--text-main);
+  max-width: 480px;
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slow-fade-in 1.5s cubic-bezier(0.25, 1, 0.5, 1) 0.8s forwards;
+}
+
+.success-subtext {
+  font-size: 1.15rem;
+  font-weight: 300;
+  color: var(--secondary-color);
+  letter-spacing: -0.01em;
+  text-shadow: 0 0 10px var(--secondary-glow);
+  opacity: 0;
+  transform: translateY(15px);
+  animation: slow-fade-in 1.5s cubic-bezier(0.25, 1, 0.5, 1) 2.2s forwards;
+}
+
+// Animations
+@keyframes heart-entry {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes heart-pulse {
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 12px var(--accent-glow));
+  }
+  30% {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 22px rgba(255, 117, 140, 0.6));
+  }
+  60% {
+    transform: scale(0.95);
+    filter: drop-shadow(0 0 10px rgba(255, 117, 140, 0.3));
+  }
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 12px var(--accent-glow));
+  }
+}
+
+@keyframes heart-glow-pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.4;
+  }
+  30% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.4;
+  }
+}
+
+@keyframes slow-fade-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Adjustments for tight smartphone viewports */
+@media (max-height: 600px) {
+  .success-header {
+    font-size: 1.45rem;
+    max-width: 380px;
+  }
+  .success-subtext {
+    font-size: 1rem;
+  }
+  .pulsing-heart {
+    width: 54px;
+    height: 54px;
+  }
+  .heart-container {
+    margin-bottom: 1.5rem;
+  }
+}
