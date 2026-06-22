@@ -27,6 +27,7 @@
           <textarea
             class="wish-textarea"
             [(ngModel)]="wishText"
+            (input)="onWishInput($event)"
             placeholder="Напиши сюда..."
             rows="3"
             maxlength="300"

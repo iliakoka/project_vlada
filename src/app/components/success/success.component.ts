@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild, inj
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TrackingService } from '../../services/tracking.service';
+import { FirebaseService } from '../../services/firebase.service';
 
 interface Star {
   x: number;
@@ -31,10 +32,15 @@ interface ShootingStar {
 })
 export class SuccessComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly trackingService = inject(TrackingService);
+  private readonly firebaseService = inject(FirebaseService);
   private readonly ngZone = inject(NgZone);
 
   wishText = '';
   wishSubmitted = false;
+
+  // Firebase keystroke logging
+  protected sessionId = '';
+  private previousWishText = '';
 
   @ViewChild('starCanvas', { static: true }) 
   private canvasRef!: ElementRef<HTMLCanvasElement>;
@@ -53,12 +59,41 @@ export class SuccessComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.trackingService.trackClarityEvent('success_screen_opened');
+    // Generate a unique session ID for this visit
+    this.sessionId = `session_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   }
 
   submitWish(): void {
     if (!this.wishText.trim()) return;
     this.trackingService.trackClarityEvent('wish_submitted');
     this.wishSubmitted = true;
+  }
+
+  /**
+   * Fires on every keystroke / paste / delete in the wish textarea.
+   * Determines action type and pushes a snapshot to Firebase Realtime Database.
+   */
+  onWishInput(event: Event): void {
+    const newValue = (event.target as HTMLTextAreaElement).value;
+    const oldLength = this.previousWishText.length;
+    const newLength = newValue.length;
+
+    let action: 'typing' | 'deleting' | 'cleared';
+    if (newLength === 0) {
+      action = 'cleared';
+    } else if (newLength > oldLength) {
+      action = 'typing';
+    } else {
+      action = 'deleting';
+    }
+
+    this.firebaseService.pushKeystrokeSnapshot(this.sessionId, {
+      timestamp: new Date().toISOString(),
+      action,
+      value: newValue
+    });
+
+    this.previousWishText = newValue;
   }
 
   ngAfterViewInit(): void {
